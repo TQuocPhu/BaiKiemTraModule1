@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bai 3</title>
+    <style>
+
+        *{
+            /* margin: 0; */
+            /* padding: 0; */
+            box-sizing: border-box;
+        }
+        
+        table, th, td { 
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Quản lý sổ tiết kiệm</h2>
+
+    <button onclick="themSoTietKiem()">Thêm sổ tiết kiệm</button>
+    <button onclick="xoaSoTietKiem()">Xóa sổ tiết kiệm</button>
+
+    <h3>Danh sách sổ tiết kiệm</h3>
+    <table id="tableSTK">
+        <thead>
+            <tr>
+                <th>Mã sổ</th>
+                <th>Loại tiết kiệm</th>
+                <th>Họ tên</th>
+                <th>CMND</th>
+                <th>Ngày mở sổ</th>
+                <th>Số tiền gửi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        class SoTietKiem {
+            maSo;
+            loai;
+            hoTen;
+            cmnd;
+            ngayMo;
+            soTien
+            
+            constructor(maSo, loai, hoTen, cmnd, ngayMo, soTien) {
+                this.maSo = maSo;
+                this.loai = loai;
+                this.hoTen = hoTen;
+                this.cmnd = cmnd;
+                this.ngayMo = ngayMo;
+                this.soTien = soTien;
+            }
+        }
+
+        let danhSachSTK = [];
+
+        function validateSTK(maSo, loai, hoTen, cmnd, ngayMo, soTien) {
+            if (!maSo || maSo.length > 5) return "Mã sổ không hợp lệ (rỗng hoặc >5 ký tự)";
+            if (!loai || loai.length > 10) return "Loại tiết kiệm không hợp lệ (rỗng hoặc >10 ký tự)";
+            if (!hoTen || hoTen.length > 30) return "Họ tên không hợp lệ (rỗng hoặc >30 ký tự)";
+            if (isNaN(cmnd) || cmnd.toString().length < 6) return "CMND phải là số có ít nhất 6 chữ số";
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(ngayMo)) return "Ngày mở sổ phải theo định dạng yyyy-mm-dd";
+            if (isNaN(soTien) || soTien <= 0) return "Số tiền gửi phải là số dương";
+            return null;
+        }
+
+        function maSoTonTai(maSo) {
+            return danhSachSTK.some(stk => stk.maSo === maSo);
+        }
+
+        function themSoTietKiem() {
+            let maSo = prompt("Nhập mã sổ (≤5 ký tự):");
+            if (maSoTonTai(maSo)) {
+                alert("Mã sổ đã tồn tại, không thể thêm.");
+                return;
+            }
+
+            let loai = prompt("Nhập loại tiết kiệm (≤10 ký tự):");
+            let hoTen = prompt("Nhập họ tên khách hàng (≤30 ký tự):");
+            let cmnd = prompt("Nhập số CMND:");
+            let ngayMo = prompt("Nhập ngày mở sổ (định dạng yyyy-mm-dd):");
+            let soTien = prompt("Nhập số tiền gửi:");
+
+            let error = validateSTK(maSo, loai, hoTen, cmnd, ngayMo, soTien);
+            if (error) {
+                alert(error);
+                return themSoTietKiem(); // nhập lại nếu lỗi
+            }
+
+            let stk = new SoTietKiem(maSo, loai, hoTen, cmnd, ngayMo, parseFloat(soTien));
+            danhSachSTK.push(stk);
+            alert("Thêm sổ tiết kiệm thành công!");
+            renderTable();
+        }
+
+        function xoaSoTietKiem() {
+            let maSo = prompt("Nhập mã sổ cần xóa:");
+            let index = danhSachSTK.findIndex(stk => stk.maSo === maSo);
+            if (index === -1) {
+                alert("Không tìm thấy mã sổ trong danh sách!");
+                return xoaSoTietKiem();
+            }
+
+            let xacNhan = confirm("Bạn có chắc muốn xóa sổ này không?");
+            if (xacNhan) {
+                danhSachSTK.splice(index, 1);
+                alert("Đã xóa thành công.");
+                renderTable();
+            }
+        }
+
+        function renderTable() {
+            let tbody = document.querySelector("#tableSTK tbody");
+            tbody.innerHTML = "";
+            for (let stk of danhSachSTK) {
+                let row = `<tr>
+                    <td>${stk.maSo}</td>
+                    <td>${stk.loai}</td>
+                    <td>${stk.hoTen}</td>
+                    <td>${stk.cmnd}</td>
+                    <td>${stk.ngayMo}</td>
+                    <td>${stk.soTien.toLocaleString()}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            }
+        }
+    </script>
+</body>
+</html>
