@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bai 2</title>
+</head>
+
+<body>
+
+    <h3>Nhập hai phân số để kiểm tra xem chúng có bằng nhau không</h3>
+
+    <label>Tử số 1: </label><input type="number" id="tu1"><br>
+    <label>Mẫu số 1: </label><input type="number" id="mau1"><br><br>
+
+    <label>Tử số 2: </label><input type="number" id="tu2"><br>
+    <label>Mẫu số 2: </label><input type="number" id="mau2"><br><br>
+
+    <button onclick="kiemTraPhanSo()">Kiểm tra</button>
+
+    <h4 id="ketQua"></h4>
+
+    <script>
+        function phanSoBangNhau(tu1, mau1, tu2, mau2) {
+            return tu1 * mau2 === tu2 * mau1;
+        }
+
+        function kiemTraPhanSo() {
+            let tu1 = parseInt(document.getElementById("tu1").value);
+            let mau1 = parseInt(document.getElementById("mau1").value);
+            let tu2 = parseInt(document.getElementById("tu2").value);
+            let mau2 = parseInt(document.getElementById("mau2").value);
+
+            if (mau1 === 0 || mau2 === 0) {
+                document.getElementById("ketQua").innerHTML = "Không thể chia cho 0";
+                return;
+            }
+
+            let bangNhau = phanSoBangNhau(tu1, mau1, tu2, mau2);
+
+            if (bangNhau) {
+                document.getElementById("ketQua").innerHTML = "Hai phân số bằng nhau";
+            }
+            else {
+                document.getElementById("ketQua").innerHTML = "Hai phân số không bằng nhau";
+            }
+        }
+    </script>
+</body>
+
+</html>
