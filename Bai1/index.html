@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bai 1</title>
+</head>
+
+<body>
+    <h2>Nhập mảng số nguyên (cách nhau dấu ;)</h2>
+    <input type="text" id="inputArray">
+    <button onclick="processArray()">Process</button>
+
+    <h3 id="output1"></h3>
+    <h3 id="output2"></h3>
+    <script>
+        function isPrime(number) {
+            if (number < 2) return false;
+            if (number === 2) return true;
+            if (number % 2 === 0) return false;
+            for (let i = 3; i < Math.sqrt(number); i += 2) {
+                if (number % i === 0) return false;
+            }
+            return true;
+        }
+
+        function processArray() {
+            let input = document.getElementById("inputArray").value;
+            let rawArray = input.split(";");
+
+            let a = [];
+
+            for (let i = 0; i < rawArray.length; i++) {
+                let number = parseInt(rawArray[i].trim());
+                if (!isNaN(number)) {
+                    a.push(number);
+                }
+            }
+
+            if (a.length === 0) {
+                alert("Vui long nhap it nhat 1 so nguyen hop le!");
+                return;
+            }
+
+            if (a.length > 50) {
+                alert("Vui long chi nhap toi da 50 so nguyen hop le!");
+                return;
+            }
+
+            let b = a.filter(isPrime);
+
+            document.getElementById("output1").innerHTML = "Mang a: [" + a.join(", ") + "]";
+            document.getElementById("output2").innerHTML = "Mang b (cac so nguyen to): [" + b.join(", ") + "]";
+        }
+    </script>
+</body>
+
+</html>
